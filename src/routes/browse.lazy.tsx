@@ -1,9 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-const Browse: React.FC = () => {
-  return <div>Browse</div>;
+const Page: React.FC = () => {
+  return <div>Page</div>;
 };
 
 export const Route = createLazyFileRoute("/browse")({
-  component: Browse,
+  component: Page,
 });

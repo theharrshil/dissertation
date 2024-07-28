@@ -17,7 +17,7 @@ const Validator = z.object({
   success: z.boolean(),
 });
 
-export const useRequest = () => {
+export const useRequests = () => {
   return useQuery({
     queryKey: ["requests"],
     queryFn: async () => {
@@ -25,7 +25,7 @@ export const useRequest = () => {
         const response = await network.get("/requests");
         const parsed = await Validator.spa(response.data);
         if (parsed.success) {
-          return parsed.data;
+          return parsed.data.data;
         } else {
           throw new Error(parsed.error.message);
         }

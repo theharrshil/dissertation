@@ -5,7 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { network } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
-const About: React.FC = () => {
+const Page: React.FC = () => {
   const navigate = useNavigate();
   const client = useQueryClient();
   const logOut = async () => {
@@ -25,5 +25,5 @@ const About: React.FC = () => {
 };
 
 export const Route = createLazyFileRoute("/settings")({
-  component: About,
+  component: Page,
 });
