@@ -9,7 +9,7 @@ export const DashLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="h-full max-h-screen min-w-full flex">
       <Sidebar />
-      <div className="p-3">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   );
 };

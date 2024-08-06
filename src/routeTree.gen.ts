@@ -17,11 +17,13 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const SettingsLazyImport = createFileRoute('/settings')()
-const RequestsLazyImport = createFileRoute('/requests')()
 const ReportsLazyImport = createFileRoute('/reports')()
 const InvoicesLazyImport = createFileRoute('/invoices')()
 const BrowseLazyImport = createFileRoute('/browse')()
 const IndexLazyImport = createFileRoute('/')()
+const RequestsIndexLazyImport = createFileRoute('/requests/')()
+const RequestsNewLazyImport = createFileRoute('/requests/new')()
+const RequestsRequestIdLazyImport = createFileRoute('/requests/$requestId')()
 
 // Create/Update Routes
 
@@ -29,11 +31,6 @@ const SettingsLazyRoute = SettingsLazyImport.update({
   path: '/settings',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/settings.lazy').then((d) => d.Route))
-
-const RequestsLazyRoute = RequestsLazyImport.update({
-  path: '/requests',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/requests.lazy').then((d) => d.Route))
 
 const ReportsLazyRoute = ReportsLazyImport.update({
   path: '/reports',
@@ -54,6 +51,25 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const RequestsIndexLazyRoute = RequestsIndexLazyImport.update({
+  path: '/requests/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/requests/index.lazy').then((d) => d.Route),
+)
+
+const RequestsNewLazyRoute = RequestsNewLazyImport.update({
+  path: '/requests/new',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/requests/new.lazy').then((d) => d.Route))
+
+const RequestsRequestIdLazyRoute = RequestsRequestIdLazyImport.update({
+  path: '/requests/$requestId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/requests/$requestId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -87,18 +103,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/requests': {
-      id: '/requests'
-      path: '/requests'
-      fullPath: '/requests'
-      preLoaderRoute: typeof RequestsLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/$requestId': {
+      id: '/requests/$requestId'
+      path: '/requests/$requestId'
+      fullPath: '/requests/$requestId'
+      preLoaderRoute: typeof RequestsRequestIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/new': {
+      id: '/requests/new'
+      path: '/requests/new'
+      fullPath: '/requests/new'
+      preLoaderRoute: typeof RequestsNewLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/': {
+      id: '/requests/'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof RequestsIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -111,8 +141,10 @@ export const routeTree = rootRoute.addChildren({
   BrowseLazyRoute,
   InvoicesLazyRoute,
   ReportsLazyRoute,
-  RequestsLazyRoute,
   SettingsLazyRoute,
+  RequestsRequestIdLazyRoute,
+  RequestsNewLazyRoute,
+  RequestsIndexLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -127,8 +159,10 @@ export const routeTree = rootRoute.addChildren({
         "/browse",
         "/invoices",
         "/reports",
-        "/requests",
-        "/settings"
+        "/settings",
+        "/requests/$requestId",
+        "/requests/new",
+        "/requests/"
       ]
     },
     "/": {
@@ -143,11 +177,17 @@ export const routeTree = rootRoute.addChildren({
     "/reports": {
       "filePath": "reports.lazy.tsx"
     },
-    "/requests": {
-      "filePath": "requests.lazy.tsx"
-    },
     "/settings": {
       "filePath": "settings.lazy.tsx"
+    },
+    "/requests/$requestId": {
+      "filePath": "requests/$requestId.lazy.tsx"
+    },
+    "/requests/new": {
+      "filePath": "requests/new.lazy.tsx"
+    },
+    "/requests/": {
+      "filePath": "requests/index.lazy.tsx"
     }
   }
 }

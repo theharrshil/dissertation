@@ -11,7 +11,7 @@ import {
   GitPullRequest,
   CreditCard,
 } from "lucide-react";
-import { useUser } from "@/hooks/queries/use-user";
+import { useAppSelector } from "@/hooks/use-store";
 
 const top = [
   {
@@ -70,14 +70,14 @@ const SideLink: React.FC<{ path: string; label: string; icon: React.JSX.Element 
 };
 
 export const Sidebar: React.FC = () => {
-  const { data } = useUser();
+  const name = useAppSelector((state) => state.auth.name);
   return (
     <div className="p-3 hidden sm:flex flex-col justify-between min-w-56 h-full bg-gray-50">
       <div>
         <div className="flex items-center justify-between">
           <Button variant="ghost">
             <img src="https://cal.com/avatar.svg" alt="user" className="h-5 w-5 mr-2" />
-            {data && <p className="ml-1 capitalize">{truncate(data.name, 14)}</p>}
+            <p className="ml-1 capitalize">{truncate(name, 14)}</p>
             <ChevronDown className="ml-2 h-4 w-5 text-gray-400" />
           </Button>
         </div>

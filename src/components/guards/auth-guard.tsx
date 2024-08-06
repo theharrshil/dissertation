@@ -1,25 +1,23 @@
 import * as React from "react";
-import { useUser } from "@/hooks/queries/use-user";
+import { useAppSelector, useAppDispatch } from "@/hooks/use-store";
 import { AuthForm } from "../forms/auth-form";
-import { Loader2 } from "lucide-react";
+import { updateToken } from "@/slices/auth-slice";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const AuthGuard: React.FC<Props> = ({ children }) => {
-  const { data, isError } = useUser();
-  if (isError) {
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useAppDispatch();
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(updateToken(token));
+    }
+  }, [dispatch]);
+  if (!isAuthenticated) {
     return <AuthForm />;
   }
-  if (data) {
-    return <>{children}</>;
-  }
-  return (
-    <div className="flex min-h-full items-center justify-center">
-      <span>
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </span>
-    </div>
-  );
+  return <>{children}</>;
 };

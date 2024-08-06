@@ -1,14 +1,15 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import axios from "redaxios";
+import axios from "axios";
 
-export const network = axios.create({
-  baseURL:
-    import.meta.env.MODE === "development"
-      ? "http://localhost:8787"
-      : "https://sls.theharrshil.workers.dev",
-  withCredentials: true,
-});
+export const network = () => {
+  return axios.create({
+    baseURL: "http://localhost:8787",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

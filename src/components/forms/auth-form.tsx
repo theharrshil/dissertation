@@ -14,7 +14,8 @@ import {
 import { cn, network } from "@/lib/utils";
 import { MailWarning, Eye, EyeOff, ShieldX, Loader2, LogIn } from "lucide-react";
 import { Input } from "../ui/input";
-import { useUser } from "@/hooks/queries/use-user";
+import { useAppDispatch } from "@/hooks/use-store";
+import { updateToken } from "@/slices/auth-slice";
 
 interface Props {
   logIn?: boolean;
@@ -34,7 +35,7 @@ const Validator = z.object({
   password: PasswordValidator,
 });
 
-const RoleEnum = z.enum(["buyer", "developer", "supplier", "admin"]).default("buyer");
+export const RoleEnum = z.enum(["buyer", "developer", "supplier", "admin"]).default("buyer");
 
 export const ResponseValidator = z.object({
   data: z.object({
@@ -42,6 +43,7 @@ export const ResponseValidator = z.object({
     name: z.string(),
     id: z.string(),
     role: RoleEnum,
+    token: z.string(),
   }),
   success: z.boolean(),
 });
@@ -66,7 +68,7 @@ export const AuthForm: React.FC<Props> = ({ logIn = true }) => {
   const [signIn, setSignIn] = React.useState(logIn);
   const [hide, setHide] = React.useState(true);
   const Schema = getSchema(signIn);
-  const { refetch } = useUser();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -83,13 +85,12 @@ export const AuthForm: React.FC<Props> = ({ logIn = true }) => {
   });
   const onSubmit = async (data: FormValidator) => {
     try {
-      const response = await network.post(signIn ? "/auth/login" : "/auth/register", data);
+      const response = await network().post(signIn ? "/auth/login" : "/auth/register", data);
       const parsed = await ResponseValidator.spa(response.data);
       if (parsed.success) {
-        const { success } = parsed.data;
-        if (success) {
-          refetch();
-        }
+        const { token } = parsed.data.data;
+        localStorage.setItem("token", token);
+        dispatch(updateToken(token));
       } else {
         console.error(parsed.error);
       }

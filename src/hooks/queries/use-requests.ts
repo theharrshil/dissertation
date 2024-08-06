@@ -22,10 +22,10 @@ export const useRequests = () => {
     queryKey: ["requests"],
     queryFn: async () => {
       try {
-        const response = await network.get("/requests");
+        const response = await network().get("/requests");
         const parsed = await Validator.spa(response.data);
         if (parsed.success) {
-          return parsed.data.data;
+          return parsed.data.data.reverse();
         } else {
           throw new Error(parsed.error.message);
         }
@@ -33,8 +33,7 @@ export const useRequests = () => {
         console.log(e);
       }
     },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
     staleTime: Infinity,
   });
 };

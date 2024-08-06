@@ -2,20 +2,19 @@ import * as React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
-import { network } from "@/lib/utils";
+import { useAppDispatch } from "@/hooks/use-store";
+import { resetAuth } from "@/slices/auth-slice";
 import { useQueryClient } from "@tanstack/react-query";
 
 const Page: React.FC = () => {
   const navigate = useNavigate();
   const client = useQueryClient();
+  const dispatch = useAppDispatch();
   const logOut = async () => {
-    const response = await network.get("/auth/logout");
-    if (response.data.success) {
-      client.removeQueries({
-        queryKey: ["user"],
-      });
-      navigate({ to: "/" });
-    }
+    localStorage.removeItem("token");
+    dispatch(resetAuth());
+    client.clear();
+    navigate({ to: "/" });
   };
   return (
     <div>
