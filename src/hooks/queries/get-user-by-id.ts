@@ -6,7 +6,7 @@ export const useUserById = (id: string) => {
     queryKey: ["user-by-id", id],
     queryFn: async () => {
       try {
-        const response = await network().get(`/auth/by-id?id=${id}`);
+        const response = await network().get(`/auth/user-by-id?id=${id}`);
         console.log(response.data);
         return response.data.data;
       } catch {

@@ -35,7 +35,7 @@ const Validator = z.object({
   password: PasswordValidator,
 });
 
-export const RoleEnum = z.enum(["buyer", "developer", "supplier", "admin"]).default("buyer");
+export const RoleEnum = z.enum(["buyer", "developer", "admin"]).default("buyer");
 
 export const ResponseValidator = z.object({
   data: z.object({
@@ -226,7 +226,6 @@ export const AuthForm: React.FC<Props> = ({ logIn = true }) => {
                       <SelectContent>
                         <SelectItem value="buyer">Buyer</SelectItem>
                         <SelectItem value="developer">Developer</SelectItem>
-                        <SelectItem value="supplier">Supplier</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const network = () => {
   return axios.create({
-    baseURL: "http://localhost:8787",
+    baseURL: import.meta.env.DEV ? "http://localhost:8787" : "https://sls.theharrshil.workers.dev",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
