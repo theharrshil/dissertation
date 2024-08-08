@@ -14,6 +14,7 @@ export const ProjectValidator = z.object({
       postcode: z.string(),
       price: z.string(),
       currency: z.string(),
+      bhk: z.string(),
     })
   ),
   success: z.boolean(),

@@ -15,23 +15,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { NonRoleValidator, useNonRole } from "@/hooks/queries/use-non-role";
+import { useNonRole } from "@/hooks/queries/use-non-role";
+import { useGetAllPlots } from "@/hooks/queries/use-get-all-plots";
 
 const FormValidator = z.object({
   description: z.string().min(0),
   to: z.string().min(0),
+  regarding: z.string().min(0),
 });
 
 type FormType = z.infer<typeof FormValidator>;
 
-const FormProps = NonRoleValidator.omit({ success: true });
+type FormProps = {
+  to: {
+    id: string;
+    name: string;
+  }[];
+  plots: {
+    id: string;
+    name: string;
+  }[];
+};
 
-const RequestForm: React.FC<z.infer<typeof FormProps>> = ({ data }) => {
+const RequestForm: React.FC<FormProps> = ({ to, plots }) => {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<FormType>({
     defaultValues: {
       description: "",
       to: "",
+      regarding: ",",
     },
     resolver: zodResolver(FormValidator),
   });
@@ -55,9 +67,29 @@ const RequestForm: React.FC<z.infer<typeof FormProps>> = ({ data }) => {
             />
           </SelectTrigger>
           <SelectContent>
-            {data.map((recipient) => (
+            {to.map((recipient) => (
               <SelectItem value={recipient.id} key={recipient.id} className="capitalize">
                 {recipient.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex items-center">
+        <Label htmlFor="regarding" className="mr-3">
+          For Project:
+        </Label>
+        <Select onValueChange={(v) => setValue("regarding", v)}>
+          <SelectTrigger className="max-w-md">
+            <SelectValue
+              className="placeholder:text-gray-400 capitalize"
+              placeholder="Please select a recipient!"
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {plots.map((plot) => (
+              <SelectItem value={plot.id} key={plot.id} className="capitalize">
+                {plot.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -76,13 +108,19 @@ const RequestForm: React.FC<z.infer<typeof FormProps>> = ({ data }) => {
 };
 
 const Page: React.FC = () => {
-  const { data } = useNonRole();
+  const roleQuery = useNonRole();
+  const plotsQuery = useGetAllPlots();
+  console.log(plotsQuery.data);
   return (
     <div>
       <div className="border-b border-gray-200">
         <p className="text-xl font-semibold p-3">Send A Request</p>
       </div>
-      <div>{data && <RequestForm data={data} />}</div>
+      <div>
+        {roleQuery.data && plotsQuery.data && (
+          <RequestForm to={roleQuery.data} plots={plotsQuery.data} />
+        )}
+      </div>
     </div>
   );
 };

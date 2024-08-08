@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const UploadImageLazyImport = createFileRoute('/upload-image')()
 const SettingsLazyImport = createFileRoute('/settings')()
 const ReportsLazyImport = createFileRoute('/reports')()
 const InvoicesLazyImport = createFileRoute('/invoices')()
@@ -26,6 +27,11 @@ const RequestsNewLazyImport = createFileRoute('/requests/new')()
 const RequestsRequestIdLazyImport = createFileRoute('/requests/$requestId')()
 
 // Create/Update Routes
+
+const UploadImageLazyRoute = UploadImageLazyImport.update({
+  path: '/upload-image',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/upload-image.lazy').then((d) => d.Route))
 
 const SettingsLazyRoute = SettingsLazyImport.update({
   path: '/settings',
@@ -110,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/upload-image': {
+      id: '/upload-image'
+      path: '/upload-image'
+      fullPath: '/upload-image'
+      preLoaderRoute: typeof UploadImageLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/requests/$requestId': {
       id: '/requests/$requestId'
       path: '/requests/$requestId'
@@ -142,6 +155,7 @@ export const routeTree = rootRoute.addChildren({
   InvoicesLazyRoute,
   ReportsLazyRoute,
   SettingsLazyRoute,
+  UploadImageLazyRoute,
   RequestsRequestIdLazyRoute,
   RequestsNewLazyRoute,
   RequestsIndexLazyRoute,
@@ -160,6 +174,7 @@ export const routeTree = rootRoute.addChildren({
         "/invoices",
         "/reports",
         "/settings",
+        "/upload-image",
         "/requests/$requestId",
         "/requests/new",
         "/requests/"
@@ -179,6 +194,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/settings": {
       "filePath": "settings.lazy.tsx"
+    },
+    "/upload-image": {
+      "filePath": "upload-image.lazy.tsx"
     },
     "/requests/$requestId": {
       "filePath": "requests/$requestId.lazy.tsx"

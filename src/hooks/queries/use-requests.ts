@@ -11,6 +11,7 @@ const Validator = z.object({
       recipient: z.string(),
       sender: z.string(),
       message: z.string().nullable(),
+      plot: z.string().optional(),
       createdAt: z.string(),
     })
   ),

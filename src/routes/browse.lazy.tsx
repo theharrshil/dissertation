@@ -31,6 +31,7 @@ const Page: React.FC = () => {
                 <p>Price: £{plot.price}</p>
                 <p>{plot.address}</p>
                 <p>{plot.postcode}</p>
+                <p>Size: {plot.bhk} BHK</p>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
