@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { network } from "@/lib/utils";
 import { z } from "zod";
-import { useUserById } from "@/hooks/queries/get-user-by-id";
+import { NameById } from "@/components/name-by-id";
 
 const Validator = z.object({
   data: z.object({
@@ -16,12 +16,6 @@ const Validator = z.object({
   }),
   success: z.boolean(),
 });
-
-const NameById: React.FC<{ id: string }> = ({ id }) => {
-  const { data } = useUserById(id);
-  if (data) return <p className="ml-1">{data.name}</p>;
-  return <p>Loading...</p>;
-};
 
 const Page: React.FC = () => {
   const { requestId } = Route.useParams();

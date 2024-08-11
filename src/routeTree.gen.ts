@@ -16,22 +16,20 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const UploadImageLazyImport = createFileRoute('/upload-image')()
 const SettingsLazyImport = createFileRoute('/settings')()
 const ReportsLazyImport = createFileRoute('/reports')()
 const InvoicesLazyImport = createFileRoute('/invoices')()
 const BrowseLazyImport = createFileRoute('/browse')()
 const IndexLazyImport = createFileRoute('/')()
 const RequestsIndexLazyImport = createFileRoute('/requests/')()
+const ImagesIndexLazyImport = createFileRoute('/images/')()
+const ExtrasIndexLazyImport = createFileRoute('/extras/')()
+const ChoicesIndexLazyImport = createFileRoute('/choices/')()
 const RequestsNewLazyImport = createFileRoute('/requests/new')()
 const RequestsRequestIdLazyImport = createFileRoute('/requests/$requestId')()
+const ImagesUploadLazyImport = createFileRoute('/images/upload')()
 
 // Create/Update Routes
-
-const UploadImageLazyRoute = UploadImageLazyImport.update({
-  path: '/upload-image',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/upload-image.lazy').then((d) => d.Route))
 
 const SettingsLazyRoute = SettingsLazyImport.update({
   path: '/settings',
@@ -65,6 +63,21 @@ const RequestsIndexLazyRoute = RequestsIndexLazyImport.update({
   import('./routes/requests/index.lazy').then((d) => d.Route),
 )
 
+const ImagesIndexLazyRoute = ImagesIndexLazyImport.update({
+  path: '/images/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/images/index.lazy').then((d) => d.Route))
+
+const ExtrasIndexLazyRoute = ExtrasIndexLazyImport.update({
+  path: '/extras/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/extras/index.lazy').then((d) => d.Route))
+
+const ChoicesIndexLazyRoute = ChoicesIndexLazyImport.update({
+  path: '/choices/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/choices/index.lazy').then((d) => d.Route))
+
 const RequestsNewLazyRoute = RequestsNewLazyImport.update({
   path: '/requests/new',
   getParentRoute: () => rootRoute,
@@ -76,6 +89,11 @@ const RequestsRequestIdLazyRoute = RequestsRequestIdLazyImport.update({
 } as any).lazy(() =>
   import('./routes/requests/$requestId.lazy').then((d) => d.Route),
 )
+
+const ImagesUploadLazyRoute = ImagesUploadLazyImport.update({
+  path: '/images/upload',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/images/upload.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -116,11 +134,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/upload-image': {
-      id: '/upload-image'
-      path: '/upload-image'
-      fullPath: '/upload-image'
-      preLoaderRoute: typeof UploadImageLazyImport
+    '/images/upload': {
+      id: '/images/upload'
+      path: '/images/upload'
+      fullPath: '/images/upload'
+      preLoaderRoute: typeof ImagesUploadLazyImport
       parentRoute: typeof rootRoute
     }
     '/requests/$requestId': {
@@ -135,6 +153,27 @@ declare module '@tanstack/react-router' {
       path: '/requests/new'
       fullPath: '/requests/new'
       preLoaderRoute: typeof RequestsNewLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/choices/': {
+      id: '/choices/'
+      path: '/choices'
+      fullPath: '/choices'
+      preLoaderRoute: typeof ChoicesIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/extras/': {
+      id: '/extras/'
+      path: '/extras'
+      fullPath: '/extras'
+      preLoaderRoute: typeof ExtrasIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/images/': {
+      id: '/images/'
+      path: '/images'
+      fullPath: '/images'
+      preLoaderRoute: typeof ImagesIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/requests/': {
@@ -155,9 +194,12 @@ export const routeTree = rootRoute.addChildren({
   InvoicesLazyRoute,
   ReportsLazyRoute,
   SettingsLazyRoute,
-  UploadImageLazyRoute,
+  ImagesUploadLazyRoute,
   RequestsRequestIdLazyRoute,
   RequestsNewLazyRoute,
+  ChoicesIndexLazyRoute,
+  ExtrasIndexLazyRoute,
+  ImagesIndexLazyRoute,
   RequestsIndexLazyRoute,
 })
 
@@ -174,9 +216,12 @@ export const routeTree = rootRoute.addChildren({
         "/invoices",
         "/reports",
         "/settings",
-        "/upload-image",
+        "/images/upload",
         "/requests/$requestId",
         "/requests/new",
+        "/choices/",
+        "/extras/",
+        "/images/",
         "/requests/"
       ]
     },
@@ -195,14 +240,23 @@ export const routeTree = rootRoute.addChildren({
     "/settings": {
       "filePath": "settings.lazy.tsx"
     },
-    "/upload-image": {
-      "filePath": "upload-image.lazy.tsx"
+    "/images/upload": {
+      "filePath": "images/upload.lazy.tsx"
     },
     "/requests/$requestId": {
       "filePath": "requests/$requestId.lazy.tsx"
     },
     "/requests/new": {
       "filePath": "requests/new.lazy.tsx"
+    },
+    "/choices/": {
+      "filePath": "choices/index.lazy.tsx"
+    },
+    "/extras/": {
+      "filePath": "extras/index.lazy.tsx"
+    },
+    "/images/": {
+      "filePath": "images/index.lazy.tsx"
     },
     "/requests/": {
       "filePath": "requests/index.lazy.tsx"

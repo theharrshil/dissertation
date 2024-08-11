@@ -2,7 +2,17 @@ import * as React from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Button } from "../ui/button";
 import { cn, truncate } from "@/lib/utils";
-import { Cog, House, Search, BookText, GitPullRequest, CreditCard, Plus } from "lucide-react";
+import {
+  Cog,
+  House,
+  Search,
+  BookText,
+  GitPullRequest,
+  CreditCard,
+  Plus,
+  Image,
+  CircleDot,
+} from "lucide-react";
 import { useAppSelector } from "@/hooks/use-store";
 
 type LinkType = {
@@ -46,9 +56,19 @@ const top = (role: string): LinkType => {
       return [
         ...common,
         {
-          path: "/upload-image",
-          label: "image",
+          path: "/choices",
+          label: "choices",
+          icon: <CircleDot className="h-4 w-4 mr-2" />,
+        },
+        {
+          path: "/extras",
+          label: "extras",
           icon: <Plus className="h-4 w-4 mr-2" />,
+        },
+        {
+          path: "/images/",
+          label: "images",
+          icon: <Image className="h-4 w-4 mr-2" />,
         },
       ];
     default:

@@ -10,7 +10,6 @@ export const useBrowse = () => {
     queryFn: async () => {
       try {
         const response = await network().get("/plot/browse");
-        console.log(response.data);
         const parsed = await ProjectValidator.spa(response.data);
         if (parsed.success) {
           return parsed.data.data;
