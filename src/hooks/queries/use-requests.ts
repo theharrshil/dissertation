@@ -11,7 +11,7 @@ const Validator = z.object({
       recipient: z.string(),
       sender: z.string(),
       message: z.string().nullable(),
-      plot: z.string().optional(),
+      plotId: z.string().nullable(),
       createdAt: z.string(),
     })
   ),
@@ -24,6 +24,7 @@ export const useRequests = () => {
     queryFn: async () => {
       try {
         const response = await network().get("/requests");
+        console.log(response.data);
         const parsed = await Validator.spa(response.data);
         if (parsed.success) {
           return parsed.data.data.reverse();

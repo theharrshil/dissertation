@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { network } from "@/lib/utils";
 import { z } from "zod";
 import { NameById } from "@/components/name-by-id";
+import { PlotById } from "@/components/plot-by-id";
 
 const Validator = z.object({
   data: z.object({
@@ -13,6 +14,7 @@ const Validator = z.object({
     status: z.string(),
     description: z.string(),
     sender: z.string(),
+    plotId: z.string().nullable(),
   }),
   success: z.boolean(),
 });
@@ -34,9 +36,7 @@ const Page: React.FC = () => {
         console.log(e);
       }
     },
-    staleTime: Infinity,
   });
-  console.log(data);
   if (data) {
     const local = new Date(
       new Date(data.createdAt).toLocaleString("en-GB", { timeZone: "Europe/London" })
@@ -54,6 +54,11 @@ const Page: React.FC = () => {
           <div className="flex">
             Receiver: <NameById id={data.recipient} />
           </div>
+          {data.plotId && (
+            <div className="flex">
+              Property in Question: <PlotById id={data.plotId} />
+            </div>
+          )}
           <p>Description: {data.description}</p>
           <p>Sent on: {local.toDateString()}</p>
           {data.message && <p>Response: {data.message}</p>}
