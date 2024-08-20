@@ -48,6 +48,11 @@ const top = (role: string): LinkType => {
       label: "invoices",
       icon: <CreditCard className="h-4 w-4 mr-2" />,
     },
+    {
+      path: "/images/",
+      label: "images",
+      icon: <Image className="h-4 w-4 mr-2" />,
+    },
   ];
   switch (role) {
     case "buyer":
@@ -64,11 +69,6 @@ const top = (role: string): LinkType => {
           path: "/extras",
           label: "extras",
           icon: <Plus className="h-4 w-4 mr-2" />,
-        },
-        {
-          path: "/images/",
-          label: "images",
-          icon: <Image className="h-4 w-4 mr-2" />,
         },
       ];
     default:
@@ -108,7 +108,7 @@ export const Sidebar: React.FC = () => {
   const name = useAppSelector((state) => state.auth.name);
   const role = useAppSelector((state) => state.auth.role);
   return (
-    <div className="p-3 hidden sm:flex flex-col justify-between min-w-56 h-full bg-gray-50">
+    <div className="p-3 hidden sm:flex flex-col justify-between min-w-56 h-full bg-gray-50 border-r border-gray-300">
       <div>
         <div className="flex items-center justify-between">
           <Button variant="ghost">

@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { z } from "zod";
 import { jwtDecode } from "jwt-decode";
 
-const Enum = z.enum(["buyer", "developer", "admin"]);
+const Enum = z.enum(["buyer", "developer", ""]);
 
 const JWTValidator = z.object({
   name: z.string(),

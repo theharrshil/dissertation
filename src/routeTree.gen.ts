@@ -28,6 +28,8 @@ const ChoicesIndexLazyImport = createFileRoute('/choices/')()
 const RequestsNewLazyImport = createFileRoute('/requests/new')()
 const RequestsRequestIdLazyImport = createFileRoute('/requests/$requestId')()
 const ImagesUploadLazyImport = createFileRoute('/images/upload')()
+const ExtrasAddLazyImport = createFileRoute('/extras/add')()
+const ChoicesAddLazyImport = createFileRoute('/choices/add')()
 
 // Create/Update Routes
 
@@ -95,6 +97,16 @@ const ImagesUploadLazyRoute = ImagesUploadLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/images/upload.lazy').then((d) => d.Route))
 
+const ExtrasAddLazyRoute = ExtrasAddLazyImport.update({
+  path: '/extras/add',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/extras/add.lazy').then((d) => d.Route))
+
+const ChoicesAddLazyRoute = ChoicesAddLazyImport.update({
+  path: '/choices/add',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/choices/add.lazy').then((d) => d.Route))
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -132,6 +144,20 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/choices/add': {
+      id: '/choices/add'
+      path: '/choices/add'
+      fullPath: '/choices/add'
+      preLoaderRoute: typeof ChoicesAddLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/extras/add': {
+      id: '/extras/add'
+      path: '/extras/add'
+      fullPath: '/extras/add'
+      preLoaderRoute: typeof ExtrasAddLazyImport
       parentRoute: typeof rootRoute
     }
     '/images/upload': {
@@ -194,6 +220,8 @@ export const routeTree = rootRoute.addChildren({
   InvoicesLazyRoute,
   ReportsLazyRoute,
   SettingsLazyRoute,
+  ChoicesAddLazyRoute,
+  ExtrasAddLazyRoute,
   ImagesUploadLazyRoute,
   RequestsRequestIdLazyRoute,
   RequestsNewLazyRoute,
@@ -216,6 +244,8 @@ export const routeTree = rootRoute.addChildren({
         "/invoices",
         "/reports",
         "/settings",
+        "/choices/add",
+        "/extras/add",
         "/images/upload",
         "/requests/$requestId",
         "/requests/new",
@@ -239,6 +269,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/settings": {
       "filePath": "settings.lazy.tsx"
+    },
+    "/choices/add": {
+      "filePath": "choices/add.lazy.tsx"
+    },
+    "/extras/add": {
+      "filePath": "extras/add.lazy.tsx"
     },
     "/images/upload": {
       "filePath": "images/upload.lazy.tsx"

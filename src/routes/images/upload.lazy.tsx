@@ -27,7 +27,7 @@ const Page: React.FC = () => {
       const storageRef = ref(storage, file.name);
       const uploaded = await uploadBytes(storageRef, file);
       const url = await getDownloadURL(uploaded.ref);
-      const response = await network().post("/developer/upload-image", {
+      const response = await network().post("/images/upload", {
         url,
         name: uploaded.metadata.name,
       });

@@ -3,6 +3,8 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/comp
 import { useBrowse } from "@/hooks/queries/use-browse";
 import { ClipboardPen } from "lucide-react";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { downloadCSV } from "@/lib/csv-download";
+import { Download } from "lucide-react";
 
 const Page: React.FC = () => {
   const { data } = useBrowse();
@@ -12,6 +14,14 @@ const Page: React.FC = () => {
       <div className="max-h-screen overflow-y-scroll">
         <div className="border-b border-gray-200 shadow-sm">
           <p className="text-2xl font-semibold p-3">Browse</p>
+        </div>
+        <div className="mt-3 mx-3">
+          <Button onClick={() => downloadCSV(data, "Browsable Properties")}>
+            <span>
+              <Download className="h-4 w-4 mr-2" />
+            </span>
+            Download These Properties
+          </Button>
         </div>
         <div className="p-3 grid grid-cols-3 gap-3">
           {data.map((plot) => (

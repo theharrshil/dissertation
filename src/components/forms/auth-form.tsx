@@ -35,7 +35,7 @@ const Validator = z.object({
   password: PasswordValidator,
 });
 
-export const RoleEnum = z.enum(["buyer", "developer", "admin"]).default("buyer");
+export const RoleEnum = z.enum(["buyer", "developer"]).default("buyer");
 
 export const ResponseValidator = z.object({
   data: z.object({

@@ -5,6 +5,9 @@ import { network } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/use-store";
 import { ProjectValidator } from "@/validators";
 import { NameById } from "@/components/name-by-id";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { downloadCSV } from "@/lib/csv-download";
 
 const Page: React.FC = () => {
   const role = useAppSelector((state) => state.auth.role);
@@ -33,18 +36,31 @@ const Page: React.FC = () => {
         </div>
         <div className="p-3">
           {data.length === 0 ? (
-            <div>You have no ongoing projects!</div>
+            <>
+              <div>You have no ongoing projects!</div>
+            </>
           ) : (
             <div className="grid grid-cols-2">
               {data.map((project) => {
                 const local = new Date(
                   new Date(project.createdAt).toLocaleString("en-GB", { timeZone: "Europe/London" })
                 );
+                const csv: (typeof project)[] = [];
+                csv.push(project);
                 return (
                   <div
                     key={project.id}
-                    className="w-full border border-gray-200 rounded p-5 flex space-x-4"
+                    className="w-full border border-gray-200 rounded p-5 flex space-x-4 relative"
                   >
+                    <div className="absolute right-3 top-3">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => downloadCSV(csv, project.name)}
+                      >
+                        <Download className="h-5 w-5" />
+                      </Button>
+                    </div>
                     <div>
                       <img
                         className="max-h-44 rounded object-cover"

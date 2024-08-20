@@ -21,11 +21,11 @@ const Validator = z.object({
 });
 
 const Page: React.FC = () => {
-  const { data, refetch } = useQuery({
+  const { data: images, refetch } = useQuery({
     queryKey: ["images"],
     queryFn: async () => {
       try {
-        const response = await network().get("/developer/images");
+        const response = await network().get("/images");
         const parsed = await Validator.spa(response.data);
         if (parsed.success) {
           return parsed.data.data;
@@ -41,13 +41,13 @@ const Page: React.FC = () => {
     try {
       const deleteRef = ref(storage, name);
       await deleteObject(deleteRef);
-      await network().post("/developer/delete-image", { id });
+      await network().post("/images/delete", { id });
       refetch();
     } catch (e) {
       console.log(e);
     }
   };
-  if (data) {
+  if (images) {
     return (
       <div className="max-h-screen overflow-y-scroll">
         <div className="border-b border-gray-200 shadow-sm">
@@ -66,11 +66,11 @@ const Page: React.FC = () => {
             <p>Your uploaded images will show up here</p>
           </div>
           <div className="mt-3">
-            {data.length === 0 ? (
+            {images.length === 0 ? (
               <div>There are no images to show!</div>
             ) : (
               <div className="grid grid-cols-4 gap-5">
-                {data.map((image) => (
+                {images.map((image) => (
                   <div
                     key={image.id}
                     className="border border-gray-300 flex items-center justify-center flex-col p-3 rounded-lg shadow relative"
