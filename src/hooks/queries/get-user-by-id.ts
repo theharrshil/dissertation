@@ -7,7 +7,6 @@ export const useUserById = (id: string) => {
     queryFn: async () => {
       try {
         const response = await network().get(`/auth/user-by-id?id=${id}`);
-        console.log(response.data);
         return response.data.data;
       } catch {
         throw new Error("something went wrong!");

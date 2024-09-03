@@ -63,7 +63,7 @@ const Page: React.FC = () => {
             </Link>
           </div>
           <div className="mt-3">
-            <p>Your uploaded images will show up here</p>
+            <p>Images that you have uploaded:</p>
           </div>
           <div className="mt-3">
             {images.length === 0 ? (

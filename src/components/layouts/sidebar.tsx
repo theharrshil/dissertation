@@ -12,6 +12,7 @@ import {
   Plus,
   Image,
   CircleDot,
+  ShoppingCart,
 } from "lucide-react";
 import { useAppSelector } from "@/hooks/use-store";
 
@@ -56,7 +57,14 @@ const top = (role: string): LinkType => {
   ];
   switch (role) {
     case "buyer":
-      return common;
+      return [
+        ...common,
+        {
+          path: "/cart",
+          label: "cart",
+          icon: <ShoppingCart className="h-4 w-4 mr-2" />,
+        },
+      ];
     case "developer":
       return [
         ...common,

@@ -2,6 +2,9 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { network } from "@/lib/utils";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 const validator = z.object({
   data: z.array(
@@ -20,6 +23,7 @@ const validator = z.object({
 });
 
 const Page: React.FC = () => {
+  const navigate = useNavigate();
   const { data } = useQuery({
     queryKey: ["extras"],
     queryFn: async () => {
@@ -42,19 +46,30 @@ const Page: React.FC = () => {
         <div className="border-b border-gray-200 shadow-sm">
           <p className="text-2xl font-semibold p-4">Extras</p>
         </div>
-        <div className="grid grid-cols-3 p-3 gap-x-5">
-          {data.map((extra) => (
-            <div key={extra.id} className="rounded p-3 shadow-sm border border-gray-300 w-80">
-              <div className="flex items-center justify-center">
-                <img src={extra.image || ""} alt={extra.name} className="h-44" />
-              </div>
-              <div className="flex items-center justify-center flex-col">
-                <p className="capitalize">{extra.name}</p>
-                <p>For: {extra.bhk} BHK</p>
-                <p>Price: £{extra.price}</p>
-              </div>
+        <div className="p-3">
+          <div className="mb-2">
+            <Button variant="outline" onClick={() => navigate({ to: "/extras/add" })}>
+              <Plus className="h-4 w-4 mr-2" /> Add Extra
+            </Button>
+          </div>
+          {data.length === 0 ? (
+            <div>You have not added any extras.</div>
+          ) : (
+            <div className="grid grid-cols-3 gap-x-5 gap-y-3">
+              {data.map((extra) => (
+                <div key={extra.id} className="rounded p-3 shadow-sm border border-gray-300 w-80">
+                  <div className="flex items-center justify-center">
+                    <img src={extra.image || ""} alt={extra.name} className="h-44" />
+                  </div>
+                  <div className="flex items-center justify-center flex-col">
+                    <p className="capitalize">{extra.name}</p>
+                    <p>For: {extra.bhk} BHK</p>
+                    <p>Price: £{extra.price}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
     );

@@ -19,6 +19,7 @@ import { Route as rootRoute } from './routes/__root'
 const SettingsLazyImport = createFileRoute('/settings')()
 const ReportsLazyImport = createFileRoute('/reports')()
 const InvoicesLazyImport = createFileRoute('/invoices')()
+const CartLazyImport = createFileRoute('/cart')()
 const BrowseLazyImport = createFileRoute('/browse')()
 const IndexLazyImport = createFileRoute('/')()
 const RequestsIndexLazyImport = createFileRoute('/requests/')()
@@ -30,6 +31,8 @@ const RequestsRequestIdLazyImport = createFileRoute('/requests/$requestId')()
 const ImagesUploadLazyImport = createFileRoute('/images/upload')()
 const ExtrasAddLazyImport = createFileRoute('/extras/add')()
 const ChoicesAddLazyImport = createFileRoute('/choices/add')()
+const AssignPlotIdIndexLazyImport = createFileRoute('/assign/$plotId/')()
+const AssignPlotIdDIdLazyImport = createFileRoute('/assign/$plotId/$dId')()
 
 // Create/Update Routes
 
@@ -47,6 +50,11 @@ const InvoicesLazyRoute = InvoicesLazyImport.update({
   path: '/invoices',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/invoices.lazy').then((d) => d.Route))
+
+const CartLazyRoute = CartLazyImport.update({
+  path: '/cart',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/cart.lazy').then((d) => d.Route))
 
 const BrowseLazyRoute = BrowseLazyImport.update({
   path: '/browse',
@@ -107,6 +115,20 @@ const ChoicesAddLazyRoute = ChoicesAddLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/choices/add.lazy').then((d) => d.Route))
 
+const AssignPlotIdIndexLazyRoute = AssignPlotIdIndexLazyImport.update({
+  path: '/assign/$plotId/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/assign/$plotId/index.lazy').then((d) => d.Route),
+)
+
+const AssignPlotIdDIdLazyRoute = AssignPlotIdDIdLazyImport.update({
+  path: '/assign/$plotId/$dId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/assign/$plotId/$dId.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -123,6 +145,13 @@ declare module '@tanstack/react-router' {
       path: '/browse'
       fullPath: '/browse'
       preLoaderRoute: typeof BrowseLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartLazyImport
       parentRoute: typeof rootRoute
     }
     '/invoices': {
@@ -209,6 +238,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestsIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/assign/$plotId/$dId': {
+      id: '/assign/$plotId/$dId'
+      path: '/assign/$plotId/$dId'
+      fullPath: '/assign/$plotId/$dId'
+      preLoaderRoute: typeof AssignPlotIdDIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/assign/$plotId/': {
+      id: '/assign/$plotId/'
+      path: '/assign/$plotId'
+      fullPath: '/assign/$plotId'
+      preLoaderRoute: typeof AssignPlotIdIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -217,6 +260,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   BrowseLazyRoute,
+  CartLazyRoute,
   InvoicesLazyRoute,
   ReportsLazyRoute,
   SettingsLazyRoute,
@@ -229,6 +273,8 @@ export const routeTree = rootRoute.addChildren({
   ExtrasIndexLazyRoute,
   ImagesIndexLazyRoute,
   RequestsIndexLazyRoute,
+  AssignPlotIdDIdLazyRoute,
+  AssignPlotIdIndexLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -241,6 +287,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/browse",
+        "/cart",
         "/invoices",
         "/reports",
         "/settings",
@@ -252,7 +299,9 @@ export const routeTree = rootRoute.addChildren({
         "/choices/",
         "/extras/",
         "/images/",
-        "/requests/"
+        "/requests/",
+        "/assign/$plotId/$dId",
+        "/assign/$plotId/"
       ]
     },
     "/": {
@@ -260,6 +309,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/browse": {
       "filePath": "browse.lazy.tsx"
+    },
+    "/cart": {
+      "filePath": "cart.lazy.tsx"
     },
     "/invoices": {
       "filePath": "invoices.lazy.tsx"
@@ -296,6 +348,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/requests/": {
       "filePath": "requests/index.lazy.tsx"
+    },
+    "/assign/$plotId/$dId": {
+      "filePath": "assign/$plotId/$dId.lazy.tsx"
+    },
+    "/assign/$plotId/": {
+      "filePath": "assign/$plotId/index.lazy.tsx"
     }
   }
 }

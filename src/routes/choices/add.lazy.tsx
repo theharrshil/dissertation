@@ -71,7 +71,7 @@ const Page: React.FC = () => {
   return (
     <div className="max-h-screen overflow-y-scroll">
       <div className="border-b border-gray-200 shadow-sm">
-        <p className="text-2xl font-semibold p-4">Add Extra</p>
+        <p className="text-2xl font-semibold p-4">Add Choice</p>
       </div>
       <div className="p-3">
         <form

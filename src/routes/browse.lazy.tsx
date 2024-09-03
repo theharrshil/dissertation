@@ -5,10 +5,12 @@ import { ClipboardPen } from "lucide-react";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { downloadCSV } from "@/lib/csv-download";
 import { Download } from "lucide-react";
+import { useAppSelector } from "@/hooks/use-store";
 
 const Page: React.FC = () => {
   const { data } = useBrowse();
   const navigate = useNavigate();
+  const role = useAppSelector((state) => state.auth.role);
   if (data) {
     return (
       <div className="max-h-screen overflow-y-scroll">
@@ -42,24 +44,26 @@ const Page: React.FC = () => {
                 <p>{plot.address}</p>
                 <p>{plot.postcode}</p>
                 <p>Size: {plot.bhk} BHK</p>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-1"
-                        onClick={() => navigate({ to: "/requests" })}
-                      >
-                        <ClipboardPen className="h-5 w-5 mr-2" />
-                        <span className="text-sm">Reserve</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Reserve This Property</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                {role === "buyer" && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-1"
+                          onClick={() => navigate({ to: "/requests" })}
+                        >
+                          <ClipboardPen className="h-5 w-5 mr-2" />
+                          <span className="text-sm">Reserve</span>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Reserve This Property</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
             </div>
           ))}
