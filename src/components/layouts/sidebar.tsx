@@ -13,6 +13,7 @@ import {
   Image,
   CircleDot,
   ShoppingCart,
+  SquarePen,
 } from "lucide-react";
 import { useAppSelector } from "@/hooks/use-store";
 
@@ -63,6 +64,11 @@ const top = (role: string): LinkType => {
           path: "/cart",
           label: "cart",
           icon: <ShoppingCart className="h-4 w-4 mr-2" />,
+        },
+        {
+          path: "/register",
+          label: "register",
+          icon: <SquarePen className="h-4 w-4 mr-2" />,
         },
       ];
     case "developer":

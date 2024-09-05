@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const SettingsLazyImport = createFileRoute('/settings')()
 const ReportsLazyImport = createFileRoute('/reports')()
+const RegisterLazyImport = createFileRoute('/register')()
 const InvoicesLazyImport = createFileRoute('/invoices')()
 const CartLazyImport = createFileRoute('/cart')()
 const BrowseLazyImport = createFileRoute('/browse')()
@@ -28,6 +29,7 @@ const ExtrasIndexLazyImport = createFileRoute('/extras/')()
 const ChoicesIndexLazyImport = createFileRoute('/choices/')()
 const RequestsNewLazyImport = createFileRoute('/requests/new')()
 const RequestsRequestIdLazyImport = createFileRoute('/requests/$requestId')()
+const ProjectsIdLazyImport = createFileRoute('/projects/$id')()
 const ImagesUploadLazyImport = createFileRoute('/images/upload')()
 const ExtrasAddLazyImport = createFileRoute('/extras/add')()
 const ChoicesAddLazyImport = createFileRoute('/choices/add')()
@@ -45,6 +47,11 @@ const ReportsLazyRoute = ReportsLazyImport.update({
   path: '/reports',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/reports.lazy').then((d) => d.Route))
+
+const RegisterLazyRoute = RegisterLazyImport.update({
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
 
 const InvoicesLazyRoute = InvoicesLazyImport.update({
   path: '/invoices',
@@ -99,6 +106,11 @@ const RequestsRequestIdLazyRoute = RequestsRequestIdLazyImport.update({
 } as any).lazy(() =>
   import('./routes/requests/$requestId.lazy').then((d) => d.Route),
 )
+
+const ProjectsIdLazyRoute = ProjectsIdLazyImport.update({
+  path: '/projects/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/projects/$id.lazy').then((d) => d.Route))
 
 const ImagesUploadLazyRoute = ImagesUploadLazyImport.update({
   path: '/images/upload',
@@ -161,6 +173,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvoicesLazyImport
       parentRoute: typeof rootRoute
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/reports': {
       id: '/reports'
       path: '/reports'
@@ -194,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/images/upload'
       fullPath: '/images/upload'
       preLoaderRoute: typeof ImagesUploadLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/projects/$id': {
+      id: '/projects/$id'
+      path: '/projects/$id'
+      fullPath: '/projects/$id'
+      preLoaderRoute: typeof ProjectsIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/requests/$requestId': {
@@ -262,11 +288,13 @@ export const routeTree = rootRoute.addChildren({
   BrowseLazyRoute,
   CartLazyRoute,
   InvoicesLazyRoute,
+  RegisterLazyRoute,
   ReportsLazyRoute,
   SettingsLazyRoute,
   ChoicesAddLazyRoute,
   ExtrasAddLazyRoute,
   ImagesUploadLazyRoute,
+  ProjectsIdLazyRoute,
   RequestsRequestIdLazyRoute,
   RequestsNewLazyRoute,
   ChoicesIndexLazyRoute,
@@ -289,11 +317,13 @@ export const routeTree = rootRoute.addChildren({
         "/browse",
         "/cart",
         "/invoices",
+        "/register",
         "/reports",
         "/settings",
         "/choices/add",
         "/extras/add",
         "/images/upload",
+        "/projects/$id",
         "/requests/$requestId",
         "/requests/new",
         "/choices/",
@@ -316,6 +346,9 @@ export const routeTree = rootRoute.addChildren({
     "/invoices": {
       "filePath": "invoices.lazy.tsx"
     },
+    "/register": {
+      "filePath": "register.lazy.tsx"
+    },
     "/reports": {
       "filePath": "reports.lazy.tsx"
     },
@@ -330,6 +363,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/images/upload": {
       "filePath": "images/upload.lazy.tsx"
+    },
+    "/projects/$id": {
+      "filePath": "projects/$id.lazy.tsx"
     },
     "/requests/$requestId": {
       "filePath": "requests/$requestId.lazy.tsx"

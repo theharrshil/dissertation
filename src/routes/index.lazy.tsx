@@ -211,6 +211,13 @@ const Page: React.FC = () => {
                         </div>
                       )}
                       <p>Date on Market: {local.toLocaleString()}</p>
+                      <Button
+                        onClick={() => {
+                          navigation({ to: `/projects/${project.id}` });
+                        }}
+                      >
+                        Go To This Project
+                      </Button>
                     </div>
                   </div>
                 );
