@@ -4,6 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { cn, network } from "@/lib/utils";
 import { NameById } from "@/components/name-by-id";
 import { ChoiceById, ExtraById } from "@/components/feature-by-id";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
+import { Button } from "@/components/ui/button";
 
 interface Response {
   project: {
@@ -42,6 +45,7 @@ interface Response {
 
 const Page: React.FC = () => {
   const { id } = Route.useParams();
+  const elementRef = React.useRef(null);
   const { data, refetch } = useQuery({
     queryKey: ["projects", id],
     queryFn: async () => {
@@ -49,14 +53,51 @@ const Page: React.FC = () => {
       return response.data.data as Response;
     },
   });
+  const handleDownloadImage = () => {
+    if (elementRef.current === null) {
+      return;
+    }
+    toPng(elementRef.current)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "generated-image.png";
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Error generating image:", err);
+      });
+  };
+  const handleGeneratePdf = () => {
+    if (elementRef.current === null) {
+      return;
+    }
+    toPng(elementRef.current)
+      .then((dataUrl) => {
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("generated-document.pdf");
+      })
+      .catch((err) => {
+        console.error("Error generating PDF:", err);
+      });
+  };
   console.log(data);
   return (
     <div className="max-h-screen overflow-y-scroll">
       <div className="border-b border-gray-200 shadow-sm">
         <p className="text-2xl font-semibold p-4">Welcome to Project View</p>
       </div>
+      <div className="p-3 space-x-2">
+        <Button onClick={handleDownloadImage}>Download This as Image</Button>
+        <Button onClick={handleGeneratePdf}>Download This as PDF</Button>
+      </div>
       {data ? (
-        <div className="flex justify-around">
+        <div className="flex justify-around" ref={elementRef}>
           <div className="p-4 w-full max-w-md">
             <div className="flex flex-col gap-4 border-gray-200 shadow-sm border p-3">
               <div className="flex flex-col gap-2">

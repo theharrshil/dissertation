@@ -7,10 +7,25 @@ import { Link } from "@tanstack/react-router";
 import { RefreshCw, Plus, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useAppSelector } from "@/hooks/use-store";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { network } from "@/lib/utils";
 
 const Page: React.FC = () => {
   const { data, isError, refetch } = useRequests();
   const uid = useAppSelector((state) => state.auth.id);
+  const onStatusChange = async (status: string, id: string) => {
+    try {
+      await network().post(`/requests/status?id=${id}`, { status });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   if (isError) {
     return <p>There was some error!</p>;
   }
@@ -48,9 +63,21 @@ const Page: React.FC = () => {
                 <div className="p-2 border border-gray-200 rounded-md my-2 flex justify-between w-full">
                   <p>{request.description}</p>
                   <div>
-                    <Badge variant={"outline"} className="capitalize">
-                      {request.status}
-                    </Badge>
+                    <Select
+                      defaultValue={request.status}
+                      onValueChange={(v) => onStatusChange(v, request.id)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="accepted">Accepted</SelectItem>
+                        <SelectItem value="in progress">In Progress</SelectItem>
+                        <SelectItem value="finished">Finished</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <Link to={`/requests/${request.id}`}>

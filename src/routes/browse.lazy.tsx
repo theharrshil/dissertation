@@ -6,6 +6,7 @@ import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { downloadCSV } from "@/lib/csv-download";
 import { Download } from "lucide-react";
 import { useAppSelector } from "@/hooks/use-store";
+import { network } from "@/lib/utils";
 
 const Page: React.FC = () => {
   const { data } = useBrowse();
@@ -52,7 +53,16 @@ const Page: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="mt-1"
-                          onClick={() => navigate({ to: "/requests" })}
+                          onClick={async () => {
+                            try {
+                              await network().post("/buyer/reserve-plot", {
+                                plotId: plot.id,
+                              });
+                              navigate({ to: "/" });
+                            } catch (e) {
+                              console.log(e);
+                            }
+                          }}
                         >
                           <ClipboardPen className="h-5 w-5 mr-2" />
                           <span className="text-sm">Reserve</span>

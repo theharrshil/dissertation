@@ -12,11 +12,14 @@ import { CartPlotId } from "@/slices/cart-slice";
 import { useSetAtom } from "jotai";
 import { ChoiceById, ExtraById } from "@/components/feature-by-id";
 import { PlotByProjectId } from "@/components/plot-by-project-id";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
 
 const Page: React.FC = () => {
   const navigation = useNavigate();
   const role = useAppSelector((state) => state.auth.role);
   const setCartPlotId = useSetAtom(CartPlotId);
+  const elementRef = React.useRef(null);
   const [progress, setProgress] = React.useState<never[]>([]);
   const { data } = useQuery({
     queryKey: ["user-home"],
@@ -35,6 +38,38 @@ const Page: React.FC = () => {
       setProgress(data.progress);
     }
   }, [data]);
+  const handleDownloadImage = () => {
+    if (elementRef.current === null) {
+      return;
+    }
+    toPng(elementRef.current)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "generated-image.png";
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Error generating image:", err);
+      });
+  };
+  const handleGeneratePdf = () => {
+    if (elementRef.current === null) {
+      return;
+    }
+    toPng(elementRef.current)
+      .then((dataUrl) => {
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("generated-document.pdf");
+      })
+      .catch((err) => {
+        console.error("Error generating PDF:", err);
+      });
+  };
   if (data)
     return (
       <>
@@ -43,7 +78,11 @@ const Page: React.FC = () => {
             <div className="border-b border-gray-200 shadow-sm">
               <p className="text-2xl font-semibold p-3">Home</p>
             </div>
-            <div className="p-3">
+            <div className="p-3 space-x-2">
+              <Button onClick={handleDownloadImage}>Download This as Image</Button>
+              <Button onClick={handleGeneratePdf}>Download This as PDF</Button>
+            </div>
+            <div className="p-3" ref={elementRef}>
               <>
                 <div className="mb-7">
                   <p className="text-xl font-semibold mb-4">Reserved Plots</p>
