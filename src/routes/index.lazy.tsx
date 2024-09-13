@@ -31,15 +31,15 @@ const Page: React.FC = () => {
   });
   React.useEffect(() => {
     if (data && data.progress) {
+      console.log(data);
       setProgress(data.progress);
     }
   }, [data]);
-  console.log(data);
   if (data)
     return (
       <>
         {role === "buyer" ? (
-          <div className="overflow-y-scroll max-h-screen">
+          <div className="overflow-y-scroll max-h-screen w-full">
             <div className="border-b border-gray-200 shadow-sm">
               <p className="text-2xl font-semibold p-3">Home</p>
             </div>
@@ -117,9 +117,9 @@ const Page: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <div className="mb-7">
+                <div className="mb-7 w-full">
                   <p className="text-xl font-semibold mb-4">Progress</p>
-                  <div>
+                  <div className="w-full">
                     {Object.keys(progress).length === 0 ? (
                       <p>There is no progress to show.</p>
                     ) : (
@@ -128,7 +128,7 @@ const Page: React.FC = () => {
                           return (
                             <div
                               key={project}
-                              className="flex flex-col max-w-sm space-y-3 items-center border border-gray-200 py-3"
+                              className="flex flex-col max-w-sm space-y-3 items-center border border-gray-200 py-3 mb-5"
                             >
                               <PlotByProjectId id={project} />
                               {/* @ts-expect-error uty */}
@@ -169,12 +169,9 @@ const Page: React.FC = () => {
             <div className="border-b border-gray-200 shadow-sm">
               <p className="text-2xl font-semibold p-3">Home</p>
             </div>
-            <div className="relative grid p-3 grid-cols-2">
+            <div className="relative grid p-3 grid-cols-2 gap-x-2" key={"developer-home"}>
               {/**@ts-expect-error uty  */}
-              {data.map((project) => {
-                const local = new Date(
-                  new Date(project.createdAt).toLocaleString("en-GB", { timeZone: "Europe/London" })
-                );
+              {data.map(({ project }) => {
                 const csv: (typeof project)[] = [];
                 csv.push(project);
                 return (
@@ -210,7 +207,6 @@ const Page: React.FC = () => {
                           <NameById id={project.developerId} />
                         </div>
                       )}
-                      <p>Date on Market: {local.toLocaleString()}</p>
                       <Button
                         onClick={() => {
                           navigation({ to: `/projects/${project.id}` });

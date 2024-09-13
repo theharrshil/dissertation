@@ -6,7 +6,6 @@ import {
   Cog,
   House,
   Search,
-  BookText,
   GitPullRequest,
   CreditCard,
   Plus,
@@ -34,11 +33,6 @@ const top = (role: string): LinkType => {
       path: "/browse",
       label: "browse",
       icon: <Search className="h-4 w-4 mr-2" />,
-    },
-    {
-      path: "/reports",
-      label: "reports",
-      icon: <BookText className="h-4 w-4 mr-2" />,
     },
     {
       path: "/requests",

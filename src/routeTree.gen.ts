@@ -17,7 +17,6 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const SettingsLazyImport = createFileRoute('/settings')()
-const ReportsLazyImport = createFileRoute('/reports')()
 const RegisterLazyImport = createFileRoute('/register')()
 const InvoicesLazyImport = createFileRoute('/invoices')()
 const CartLazyImport = createFileRoute('/cart')()
@@ -34,6 +33,8 @@ const ImagesUploadLazyImport = createFileRoute('/images/upload')()
 const ExtrasAddLazyImport = createFileRoute('/extras/add')()
 const ChoicesAddLazyImport = createFileRoute('/choices/add')()
 const AssignPlotIdIndexLazyImport = createFileRoute('/assign/$plotId/')()
+const ExtrasEditIdLazyImport = createFileRoute('/extras/edit/$id')()
+const ChoicesEditIdLazyImport = createFileRoute('/choices/edit/$id')()
 const AssignPlotIdDIdLazyImport = createFileRoute('/assign/$plotId/$dId')()
 
 // Create/Update Routes
@@ -42,11 +43,6 @@ const SettingsLazyRoute = SettingsLazyImport.update({
   path: '/settings',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/settings.lazy').then((d) => d.Route))
-
-const ReportsLazyRoute = ReportsLazyImport.update({
-  path: '/reports',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/reports.lazy').then((d) => d.Route))
 
 const RegisterLazyRoute = RegisterLazyImport.update({
   path: '/register',
@@ -134,6 +130,20 @@ const AssignPlotIdIndexLazyRoute = AssignPlotIdIndexLazyImport.update({
   import('./routes/assign/$plotId/index.lazy').then((d) => d.Route),
 )
 
+const ExtrasEditIdLazyRoute = ExtrasEditIdLazyImport.update({
+  path: '/extras/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/extras/edit/$id.lazy').then((d) => d.Route),
+)
+
+const ChoicesEditIdLazyRoute = ChoicesEditIdLazyImport.update({
+  path: '/choices/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/choices/edit/$id.lazy').then((d) => d.Route),
+)
+
 const AssignPlotIdDIdLazyRoute = AssignPlotIdDIdLazyImport.update({
   path: '/assign/$plotId/$dId',
   getParentRoute: () => rootRoute,
@@ -178,13 +188,6 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/reports': {
-      id: '/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof ReportsLazyImport
       parentRoute: typeof rootRoute
     }
     '/settings': {
@@ -271,6 +274,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssignPlotIdDIdLazyImport
       parentRoute: typeof rootRoute
     }
+    '/choices/edit/$id': {
+      id: '/choices/edit/$id'
+      path: '/choices/edit/$id'
+      fullPath: '/choices/edit/$id'
+      preLoaderRoute: typeof ChoicesEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/extras/edit/$id': {
+      id: '/extras/edit/$id'
+      path: '/extras/edit/$id'
+      fullPath: '/extras/edit/$id'
+      preLoaderRoute: typeof ExtrasEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/assign/$plotId/': {
       id: '/assign/$plotId/'
       path: '/assign/$plotId'
@@ -289,7 +306,6 @@ export const routeTree = rootRoute.addChildren({
   CartLazyRoute,
   InvoicesLazyRoute,
   RegisterLazyRoute,
-  ReportsLazyRoute,
   SettingsLazyRoute,
   ChoicesAddLazyRoute,
   ExtrasAddLazyRoute,
@@ -302,6 +318,8 @@ export const routeTree = rootRoute.addChildren({
   ImagesIndexLazyRoute,
   RequestsIndexLazyRoute,
   AssignPlotIdDIdLazyRoute,
+  ChoicesEditIdLazyRoute,
+  ExtrasEditIdLazyRoute,
   AssignPlotIdIndexLazyRoute,
 })
 
@@ -318,7 +336,6 @@ export const routeTree = rootRoute.addChildren({
         "/cart",
         "/invoices",
         "/register",
-        "/reports",
         "/settings",
         "/choices/add",
         "/extras/add",
@@ -331,6 +348,8 @@ export const routeTree = rootRoute.addChildren({
         "/images/",
         "/requests/",
         "/assign/$plotId/$dId",
+        "/choices/edit/$id",
+        "/extras/edit/$id",
         "/assign/$plotId/"
       ]
     },
@@ -348,9 +367,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/register": {
       "filePath": "register.lazy.tsx"
-    },
-    "/reports": {
-      "filePath": "reports.lazy.tsx"
     },
     "/settings": {
       "filePath": "settings.lazy.tsx"
@@ -387,6 +403,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/assign/$plotId/$dId": {
       "filePath": "assign/$plotId/$dId.lazy.tsx"
+    },
+    "/choices/edit/$id": {
+      "filePath": "choices/edit/$id.lazy.tsx"
+    },
+    "/extras/edit/$id": {
+      "filePath": "extras/edit/$id.lazy.tsx"
     },
     "/assign/$plotId/": {
       "filePath": "assign/$plotId/index.lazy.tsx"

@@ -25,7 +25,9 @@ const Page: React.FC = () => {
   const { data } = useQuery({
     queryKey: ["invoices"],
     queryFn: async () => {
-      const response = await network().get(role ? "/buyer/invoices" : "/developer/invoices");
+      const response = await network().get(
+        role === "buyer" ? "/buyer/invoices" : "/developer/invoices"
+      );
       return response.data.data;
     },
   });

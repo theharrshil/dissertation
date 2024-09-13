@@ -5,6 +5,7 @@ import { network } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { Pen } from "lucide-react";
 
 const validator = z.object({
   data: z.array(
@@ -58,7 +59,18 @@ const Page: React.FC = () => {
           ) : (
             <div className="grid grid-cols-3 gap-x-5">
               {data.map((choice) => (
-                <div key={choice.id} className="rounded p-3 shadow-sm border border-gray-300 w-80">
+                <div
+                  key={choice.id}
+                  className="rounded p-3 shadow-sm border border-gray-300 w-80 relative"
+                >
+                  <div className="absolute top-2 right-2 flex gap-2 items-center">
+                    <Button
+                      size="icon"
+                      onClick={() => navigate({ to: `/choices/edit/${choice.id}` })}
+                    >
+                      <Pen className="h-4 w-4" />
+                    </Button>
+                  </div>
                   <div className="flex items-center justify-center">
                     <img src={choice.image || ""} alt={choice.name} className="h-44" />
                   </div>

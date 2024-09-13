@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { network } from "@/lib/utils";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Pen, Plus } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
 const validator = z.object({
@@ -57,7 +57,18 @@ const Page: React.FC = () => {
           ) : (
             <div className="grid grid-cols-3 gap-x-5 gap-y-3">
               {data.map((extra) => (
-                <div key={extra.id} className="rounded p-3 shadow-sm border border-gray-300 w-80">
+                <div
+                  key={extra.id}
+                  className="rounded p-3 shadow-sm border border-gray-300 w-80 relative"
+                >
+                  <div className="absolute top-2 right-2 flex gap-2 items-center">
+                    <Button
+                      size="icon"
+                      onClick={() => navigate({ to: `/extras/edit/${extra.id}` })}
+                    >
+                      <Pen className="h-4 w-4" />
+                    </Button>
+                  </div>
                   <div className="flex items-center justify-center">
                     <img src={extra.image || ""} alt={extra.name} className="h-44" />
                   </div>

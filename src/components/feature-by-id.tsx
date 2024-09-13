@@ -10,7 +10,6 @@ export const ChoiceById: React.FC<{ id: string }> = ({ id }) => {
       return response.data.data;
     },
   });
-  console.log(data);
   if (data) {
     return <p>{data.name}</p>;
   }
@@ -25,7 +24,6 @@ export const ExtraById: React.FC<{ id: string }> = ({ id }) => {
       return response.data.data;
     },
   });
-  console.log(data);
   if (data) {
     return <p>{data.name}</p>;
   }
